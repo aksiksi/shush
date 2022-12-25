@@ -2,7 +2,32 @@
 name = "shush"
 version = "0.1.0"
 edition = "2021"
+readme = "README.md"
+homepage = "https://github.com/aksiksi/shush"
+repository = "https://github.com/aksiksi/shush"
+categories = ["command-line-utilities", "multimedia", "multimedia::audio"]
+rust-version = "1.64"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
+thiserror = "1"
+whisper-rs = "0.3"
+ffmpeg-next = { version = "5.1", default-features = false, features = ["codec", "format", "software-resampling"] }
+clap = { version = "3", features = ["derive"] }
+
+[target.'cfg(windows)'.build-dependencies]
+vcpkg = "0.2"
+
+# Info for cargo-vcpkg
+[package.metadata.vcpkg]
+git = "https://github.com/microsoft/vcpkg"
+rev = "cef0b3ec767df6e83806899fe9525f6cf8d7bc91"
+
+[package.metadata.vcpkg.target]
+x86_64-pc-windows-msvc = { triplet = "x64-windows-static-md", dependencies = ["ffmpeg"] }
+
+[profile.release]
+# https://doc.rust-lang.org/cargo/reference/profiles.html
+lto = "thin"
+strip = true
